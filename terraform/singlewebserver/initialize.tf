@@ -4,11 +4,9 @@
 #-----
 terraform {
   backend "s3" {
-    bucket         = "terraform-statefiles.thenuclei.org"
-    key            = "simple-webserver-ansibleprovisioner.tfstate"
-    region         = "us-west-2"
-    encrypt        = "true"
-    profile        = "default"
-    dynamodb_table = "terraform-locker"
+    bucket         = "awsterraform"
+    key            = "state.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "lock-terraform"
   }
 }
