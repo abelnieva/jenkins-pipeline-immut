@@ -4,7 +4,7 @@ pipeline {
 
     environment{
         MAJOR_VERSION = 1
-        AWS_ID = credentials("AWS_ID")
+        AWS_ID = credentials("8cb623b3-7377-4184-8913-b4deeb8da952")
         AWS_ACCESS_KEY_ID = "${env.AWS_ID_USR}"
         AWS_SECRET_ACCESS_KEY = "${env.AWS_ID_PSW}"
         //NO_BASH_HISTORY = "set +o history"
