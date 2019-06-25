@@ -37,7 +37,6 @@ pipeline {
     stages{
         
          stage('Check-Update Terraform Binary'){
-            agent any
             steps{
                 script{
                     //TODO - update TF using get-hashicorp if requested; create a build param option and logic to check TF output if new ver avail
@@ -50,7 +49,6 @@ pipeline {
         }
 
         stage('Init Terraform - Single Web Server (No ASG)'){
-            agent any
             when {
                 expression { params.TF_ASG != true }
             }
@@ -62,7 +60,6 @@ pipeline {
         }
 
         stage('Init Terraform - ASG / ELB Web Servers'){
-            agent any
             when {
                 expression { params.TF_ASG == true }
             }
@@ -74,7 +71,6 @@ pipeline {
         }
 
         stage('Create Web Server AWS AMI'){
-            agent any
             steps{
                 echo "Create AWS AMI using Packer"
                 dir('web-images'){
@@ -88,7 +84,6 @@ pipeline {
         }
 
         stage('Deploy Web Server AMI -  Single Web Server (No ASG)'){
-            agent any
             environment{
                 NEWAMI = readFile 'ami.txt'
             }
@@ -110,7 +105,6 @@ pipeline {
         }
         
         stage('Deploy Web Server AMI - ASG / ELB Web Servers'){
-            agent any
             environment{
                 NEWAMI = readFile 'ami.txt'
             }
@@ -131,7 +125,6 @@ pipeline {
 
 
         stage('Cleanup TF AWS Resources- Single Web Server (No ASG)'){
-            agent any
             environment{
                 NEWAMI = readFile 'ami.txt'
             }
@@ -151,7 +144,6 @@ pipeline {
         }
 
         stage('Cleanup TF AWS Resources-  ASG / ELB Web Servers'){
-            agent any
             environment{
                 NEWAMI = readFile 'ami.txt'
             }
@@ -171,7 +163,6 @@ pipeline {
         }
 
         stage('Cleanup Packer AWS AMI'){
-            agent any
             when {
                 expression { params.AMI_CLEANUP == true && params.TF_CLEANUP == true }
             }
