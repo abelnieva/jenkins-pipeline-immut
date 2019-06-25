@@ -1,6 +1,11 @@
 #!groovy​
 pipeline {
-    agent none
+    agent {
+            docker {
+      image 'goforgold/build-container:latest'
+    }
+
+    }
 
     environment{
         MAJOR_VERSION = 1
