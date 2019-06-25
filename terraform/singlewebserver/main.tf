@@ -40,14 +40,6 @@ module "networking" {
   #database_privatesubnet_cidrs = [""]
   enable_natgateway = "false"
   enable_bastion    = "false"
-
-  tags {
-    # Name tag is handled internally
-    "Terraform"   = "true"
-    "Role"        = "networking"
-    "Department"  = "development"
-    "Environment" = "${var.environment}"
-  }
 }
 
 module "simplewebserver" {
