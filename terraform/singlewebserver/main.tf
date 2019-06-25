@@ -7,15 +7,12 @@ terraform {
 # CONFIGURE AWS CONNECTION (PROVIDER)
 # ------------------------------------------------------------------------------
 provider "aws" {
-  version    = "~> 1.9"
   region     = "${var.region_uswest2}"
   access_key = "${var.aws_accesskey_uswest2}"
   secret_key = "${var.aws_secretkey_uswest2}"
 }
 
-provider "template" {
-  version = "~> 1.0"
-}
+provider "template" {}
 
 # ROUTE53 -- TODO put this global... just playing now
 data "aws_route53_zone" "selected" {

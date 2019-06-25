@@ -1,12 +1,6 @@
 #!groovy​
 pipeline {
-    agent {
-            docker {
-      image 'goforgold/build-container:latest'
-    }
-
-    }
-
+    agent any
     environment{
         MAJOR_VERSION = 1
         AWS_ID = credentials("8cb623b3-7377-4184-8913-b4deeb8da952")
@@ -36,25 +30,41 @@ pipeline {
         //create a groovy lib/script to handle prepending no-bash-history instead of this manual env var hack
     stages{
         
+        stage('install Terraform')
+        {
+            steps{
+
+                sh '''
+       rm -rf /tmp/terraform
+                wget -O terraform_0.12.3_linux_amd64.zip https://releases.hashicorp.com/terraform/0.12.3/terraform_0.12.3_linux_amd64.zip
+                unzip terraform_0.12.3_linux_amd64.zip -d /tmp/
+                chmod +x /tmp/terraform
+
+
+'''
+
+            }
+        }
          stage('Check-Update Terraform Binary'){
             steps{
                 script{
                     //TODO - update TF using get-hashicorp if requested; create a build param option and logic to check TF output if new ver avail
                     //def tfexit = sh returnStatus: true, script: 'terraform --version'
                     //echo "return code TF: ${tfexit}"
-                    def tfout = sh returnStdout: true, script: 'terraform --version'
+                    def tfout = sh returnStdout: true, script: './terraform --version'
                     echo "tf output: ${tfout}"
                 }
             }
         }
 
         stage('Init Terraform - Single Web Server (No ASG)'){
+
             when {
                 expression { params.TF_ASG != true }
             }
             steps{
                 dir('terraform/singlewebserver'){
-                    sh "terraform init -input=false -var 'aws_accesskey_uswest2=${AWS_ACCESS_KEY_ID}' -var 'aws_secretkey_uswest2=${AWS_SECRET_ACCESS_KEY}'"
+                    sh "../../terraform init -input=false -var 'aws_accesskey_uswest2=${AWS_ACCESS_KEY_ID}' -var 'aws_secretkey_uswest2=${AWS_SECRET_ACCESS_KEY}'"
                 }
             }
         }
